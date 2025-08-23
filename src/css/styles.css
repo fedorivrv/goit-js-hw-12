@@ -120,3 +120,13 @@
 #search-form button:hover {
   background-color: #3451d1;
 }
+.hidden {
+  display: none;
+}
+#load-more {
+  margin: 20px auto;
+  display: block;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
