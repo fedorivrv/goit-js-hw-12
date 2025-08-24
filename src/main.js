@@ -18,6 +18,7 @@ const loadMoreBtn = document.querySelector('#load-more');
 let currentQuery = '';
 let currentPage = 1;
 let totalHits = 0;
+let loadedImages = 0;
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -34,6 +35,7 @@ form.addEventListener('submit', async e => {
 
   currentQuery = query;
   currentPage = 1;
+  loadedImages = 0;
   clearGallery();
   hideLoadMoreButton();
 
@@ -45,7 +47,7 @@ form.addEventListener('submit', async e => {
     totalHits = data.totalHits;
 
     if (!data.hits.length) {
-      iziToast.info({
+      iziToast.warning({
         title: 'No Results',
         message:
           'Sorry, there are no images matching your search query. Please try again!',
@@ -53,8 +55,9 @@ form.addEventListener('submit', async e => {
       });
     } else {
       createGallery(data.hits);
+      loadedImages += data.hits.length;
 
-      if (currentPage * 15 < totalHits) {
+      if (loadedImages < totalHits) {
         showLoadMoreButton();
       }
     }
@@ -72,16 +75,17 @@ form.addEventListener('submit', async e => {
 
 loadMoreBtn.addEventListener('click', async () => {
   currentPage += 1;
+  hideLoadMoreButton();
   showLoader();
-  loadMoreBtn.disabled = true;
 
   try {
     const data = await getImagesByQuery(currentQuery, currentPage);
     createGallery(data.hits);
+    loadedImages += data.hits.length;
 
-    smoothScroll();
+    smoothScroll(data.hits.length);
 
-    if (currentPage * 15 >= totalHits) {
+    if (loadedImages >= totalHits) {
       hideLoadMoreButton();
       iziToast.info({
         title: 'End of Results',
@@ -89,7 +93,7 @@ loadMoreBtn.addEventListener('click', async () => {
         position: 'topRight',
       });
     } else {
-      loadMoreBtn.disabled = false;
+      showLoadMoreButton();
     }
   } catch {
     iziToast.error({
@@ -102,13 +106,13 @@ loadMoreBtn.addEventListener('click', async () => {
   }
 });
 
-function smoothScroll() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
+function smoothScroll(newItemsCount) {
+  const gallery = document.querySelector('.gallery');
+  const items = gallery.querySelectorAll('.gallery-item');
+  if (items.length > 0 && newItemsCount > 0) {
+    const firstNewItem = items[items.length - newItemsCount];
+    if (firstNewItem) {
+      firstNewItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }

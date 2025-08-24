@@ -12,36 +12,29 @@
 
 .loader {
   display: none;
-}
-.loader.visible {
-  display: block;
-}
-.loader {
-  display: none;
   text-align: center;
   font-size: 16px;
   font-style: italic;
   color: #555;
-  margin-top: 10px;
-}
-.loading-message.visible {
-  display: block;
+  margin: 15px auto;
 }
 
-/* Loader-анімація (коло) */
-.loader-container {
-  display: none;
-  width: 48px;
-  height: 48px;
-  border: 5px solid #ccc;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
 .loader.visible {
   display: block;
 }
+
+.loader::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 10px auto 0;
+  border: 4px solid #ccc;
+  border-top: 4px solid #4a90e2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -59,6 +52,7 @@
   padding: 0;
   margin: 0;
 }
+
 .gallery-item {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -67,14 +61,17 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
+
 .gallery-item:hover {
   transform: scale(1.02);
 }
+
 .gallery-item img {
   display: block;
   width: 100%;
   height: auto;
 }
+
 .info {
   padding: 8px;
   font-size: 14px;
@@ -83,6 +80,7 @@
 .info p {
   margin: 4px 0;
 }
+
 #search-form {
   display: flex;
   justify-content: center;
@@ -91,8 +89,7 @@
   margin: 20px 0;
 }
 
-#search-form input[type='text'],
-#search-form input[name='searchQuery'] {
+#search-form input[type='text'] {
   padding: 10px 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -101,8 +98,7 @@
   transition: border-color 0.3s ease;
 }
 
-#search-form input[type='text']:focus,
-#search-form input[name='searchQuery']:focus {
+#search-form input[type='text']:focus {
   border-color: #4a90e2;
 }
 
@@ -120,13 +116,24 @@
 #search-form button:hover {
   background-color: #3451d1;
 }
+
 .hidden {
   display: none;
 }
+
 #load-more {
   margin: 20px auto;
-  display: block;
-  padding: 10px 20px;
+
+  padding: 12px 22px;
+  font-size: 16px;
+  background-color: #4a6cf7;
+  color: white;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#load-more:hover {
+  background-color: #3451d1;
 }
